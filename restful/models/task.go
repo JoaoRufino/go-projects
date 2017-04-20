@@ -5,24 +5,24 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type tasksController struct {
-	ID   bson.ObjectID `bson:"_id,omitempty" json:"id"`
+type Task struct {
+	ID   bson.ObjectId `bson:"_id,omitempty" json:"id"`
 	Name string        `bson:"name" json:"name"`
 	Desc string        `bson:"desc" json:"desc"`
 }
 
 var Tasks = new(tasks)
 
-type Tasks struct{}
+type tasks struct{}
 
 func (tasks) FindAll() ([]*Task, error) {
-	var ts []*Taskreturn
+	var ts []*Task
 	return ts, common.DB.Tasks.Find(nil).All(&ts)
 }
 
 func (tasks) FindOne(id string) (*Task, error) {
 	var t *Task
-	return t, common.DB.Tasks.Find(bson.M{"_id": bson.IsObjectIdHex(id).One(&t)})
+	return t, common.DB.Tasks.Find(bson.M{"_id": bson.IsObjectIdHex(id)}).One(&t)
 }
 
 func (tasks) Create(name, desc string) (*Task, error) {
@@ -31,7 +31,7 @@ func (tasks) Create(name, desc string) (*Task, error) {
 		Name: name,
 		Desc: desc,
 	}
-	if err := common.DB.Tasks.Insert(T); err != nil {
+	if err := common.DB.Tasks.Insert(t); err != nil {
 		return nil, err
 	}
 	return t, nil
