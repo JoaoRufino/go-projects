@@ -1,8 +1,6 @@
 package common
 
-import (
-	""
-)
+import mgo "gopkg.in/mgo.v2"
 
 type mongo struct {
 	Tasks *mgo.Collection
@@ -11,5 +9,11 @@ type mongo struct {
 var DB *mongo
 
 func connectDB() {
-	func 
+	session, err := mgo.Dial("172.17.0.2")
+	if err != nil {
+		panic(err)
+	}
+
+	DB = &mongo{session.DB("taskdb").C("tasks")}
+
 }
