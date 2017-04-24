@@ -1,11 +1,12 @@
 
 class Channel extends React.Component{
 	onclick(){
-		console.log('I was clicker',this.props.name);
+		console.log('I was clicked',this.props.name);
 	}
 	render(){
 		return(
-			<li>{this.onClick.bind(this)}>{this.props.name}</li> /*Passing the name to the html*/
+			/*Passing the name to the html*/
+			<li onClick>{this.onClick.bind(this)} => {this.props.name}</li> 
 			)
 	}
 }
@@ -17,7 +18,7 @@ class ChannelList extends React.Component{
 			<ul>
 			{this.props.channels.map(channel => {
 				return (
-				<Channel name='Embedded Systems' />
+				<Channel name={channel.name}/>
 				)
 			}
 			)}
@@ -59,17 +60,13 @@ class ChannelForm extends React.Component{
 			)
 	}
 }
-
-/*ReactDOM.render(<Channel name='Embedded Systems'/>,
-document.getElementById('app'));*/ 
-
 //ON THE REACTDOM A UNIQUE THING CAN BE RENDERED (THE TRICK IS RENDER SOMETHING WITH MULTIPLE SUBFILES)
 
 class ChannelSection extends React.Component{
 	constructor(props){
 		super(props),
 		this.state = {
-			channels: 
+			channels: [
 		{ name: 'Embedded Systems'},
 		{ name: 'Professores' }]
 	};
@@ -85,17 +82,20 @@ class ChannelSection extends React.Component{
 	render(){
 		return (
 			<div>
-			<ChannelList channels={channels} />
-			<ChannelForm/>
+			<ChannelList channels={this.state.channels} />
+			<ChannelForm addChannel = {this.addChannel.bind(this)}/>
 			</div>
 			)
 	}
 }
 
 
-/*ReactDOM.render(<ChannelList channels ={channels} />,
-document.getElementById('app'));*/
+
 
 ReactDOM.render(<ChannelSection />,
 document.getElementById('app'));
 
+/*ReactDOM.render(<Channel name='Embedded Systems'/>,
+document.getElementById('app'));*/ 
+/*ReactDOM.render(<ChannelList channels ={channels} />,
+document.getElementById('app'));*/
