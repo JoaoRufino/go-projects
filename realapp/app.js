@@ -1,12 +1,12 @@
 
 class Channel extends React.Component{
-	onclick(){
+	onClick(){
 		console.log('I was clicked',this.props.name);
 	}
 	render(){
 		return(
 			/*Passing the name to the html*/
-			<li onClick>{this.onClick.bind(this)} => {this.props.name}</li> 
+			<li onClick={this.onClick.bind(this)}>{this.props.name}</li> 
 			)
 	}
 }
@@ -27,17 +27,22 @@ class ChannelList extends React.Component{
 	}
 }
 
+
+
+
 //Adicionar things to array nao esquecer do bind!!!!
 class ChannelForm extends React.Component{
 	constructor(props){
 		super(props); //has the same properties
-		this.state = {}; //initialize the state of the component ITEMS MODIFIED HERE WILL TRIGGER THE RENDER CYCLE
+		this.state = {
+
+		}; //initialize the state of the component ITEMS MODIFIED HERE WILL TRIGGER THE RENDER CYCLE
 	}
 	onChange(e){
 		this.setState({
 			channelName: e.target.value
 		});
-			console.log(e.targe.value);
+			console.log(e.target.value);
 	}
 	onSubmit(e)
 		{
@@ -46,7 +51,7 @@ class ChannelForm extends React.Component{
 					this.setState({
 			channelName: '' //to make the text disapear after submiting
 		});
-			this.props.addChannel();
+			this.props.addChannel(channelName);
 			e.preventDefault();		//prevent browser from sending things
 	}
 	render(){
@@ -92,10 +97,15 @@ class ChannelSection extends React.Component{
 
 
 
+
+
 ReactDOM.render(<ChannelSection />,
 document.getElementById('app'));
+/*
+ReactDOM.render(<Channel name='Embedded Systems'/>,
+document.getElementById('app'));
+*/
 
-/*ReactDOM.render(<Channel name='Embedded Systems'/>,
-document.getElementById('app'));*/ 
 /*ReactDOM.render(<ChannelList channels ={channels} />,
 document.getElementById('app'));*/
+
