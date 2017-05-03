@@ -1,0 +1,21 @@
+{
+	"name": "blog",
+	"authors": [
+		"joao <joao.rufino@ua.pt>" 
+	],
+	"dependencies": {
+		"bootstrap":"3.1.0",
+		"jquery":"2.1.0"
+	},
+	"description": "",
+	"main": "",
+	"license": "MIT",
+	"homepage": "",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	]
+}
