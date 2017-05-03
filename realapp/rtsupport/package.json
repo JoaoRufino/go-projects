@@ -1,0 +1,14 @@
+{
+  "name": "rtsupport",
+  "version": "1.0.0",
+  "description": "Realtime support frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "João Rufino",
+  "license": "MIT",
+  "devDependencies": {
+    "react": "^15.5.4"
+  }
+}

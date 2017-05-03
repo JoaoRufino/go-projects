@@ -1,5 +1,7 @@
 package main
 
+//#cgo LDFLAGS:-L. -lit2s-asn-cam
+//#cgo CFLAGS:-I.
 /*#include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
