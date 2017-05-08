@@ -1,3 +1,7 @@
-var alerter = require('./alerter');
+import React from 'react';
+import React from 'react-dom';
 
-alerter('Heres an alert');
+ReactDOM.render(
+	<App />,
+	document.getElementById('root')
+	);

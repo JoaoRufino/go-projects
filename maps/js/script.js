@@ -1,49 +1,11 @@
-(function(window,mapster) {
+(function(window, $) {
   
-  // map options
-  var options= mapster.MAP_OPTIONS,
-  element = document.getElementById('map-canvas'),
-  // map
-  map = Mapster.create(element, options);
-//  map.zoom(18);
-//  alert(map.zoom());()
+  var $mapster = $('#map-canvas').mapster(Mapster.MAP_OPTIONS);
 
-/*    event:{
-      name: 'dragend',
-      callback: function(){
-        alert('Hello!')
-      }
-    },*/
-  var marker= map.addMarker({
-    lat:  40.5333333,
-    lng: -8.435883,
-    visible: true,
-    draggable: true,
-    id: 1,
-    content:'Acidente normal',
-/*    event:{
-      name: 'click',
-      callback: function(){
-        map._removeMarker(marker);
-      }
-    },*/
-    icon: 'images/accident.svg'
-    });
+  $mapster.mapster('addMarker',{
+    lat: 40.5,
+    lng: -8.3,
+    content: 'Acidente Normal',
+  })
 
-    var marker2= map.addMarker({
-    lat:  40.6333333,
-    lng: -8.435883,
-    visible: true,
-    draggable: true,
-    id: 2,
-    content:'Acidente autocarro',
-    icon: 'images/accident_bus.svg'
-    });
-
-    var found = map.findBy(function(marker){
-      return marker.draggable === true;
-    });
-
-    console.log(found);
-
-}(window,window.Mapster));
+}(window,jQuery));

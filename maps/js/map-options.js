@@ -11,11 +11,32 @@ mapster.MAP_OPTIONS = {
     draggable: true,
 
     maxZoom:13,
-    minZoom:11,
+    minZoom:1,
     zoomControlOptions: {
       position: google.maps.ControlPosition.TOP_LEFT,
       style: google.maps.ZoomControlStyle.DEFAULT
+    },
+    cluster: {
+      options:{
+        averageCenter: true,
+        styles:[{
+          url: 'images/m2.svg',
+          height: 56,
+          width: 55,
+          textSize:19
+          },
+          {
+          url: 'images/m1.svg',
+          height: 56,
+          width: 55,
+          textColor: '#F00',
+          textSize:18
+
+          
+      }]
     }
+  }
+
 
   };
 
