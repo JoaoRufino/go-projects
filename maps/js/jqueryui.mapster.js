@@ -24,6 +24,12 @@
       addMarker: function( opts ) {
        return this.map.addMarker(opts);
       },
+      findMarkers:function(callback) {
+      	return this.map.findBy(callback);
+      },
+      findMarkers:function(callback) {
+      	return this.map.removeBy(callback);
+      },
  
       // Events bound via _on are removed automatically
       // revert other modifications here
