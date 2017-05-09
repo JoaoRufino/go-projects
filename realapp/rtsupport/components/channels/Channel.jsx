@@ -1,26 +1,31 @@
-import React, {Component} from 'react';
+import React, { Component, PropTypes } from 'react'
 
-class Channel extends Component{
-	onClick(e){
-		e.preventDefault();
-		const {setChannel, channel} = this.props;
-		setChannel(channel);
-	}
-	render(){
-		const {channel} = this.props;
-		return (
-			<li>
-				<a onClick={this.onClick.bind(this)}>
-					{channel.name}
-				</a>
-			</li>
-			)
-		}
-	}
-	Channel.propTypes = {
-		channel: React.PropTypes.object.isRequired,
-		setChannel: React.PropTypes.func.isRequired
-	}
+class Channel extends Component {
 
-	export default Channel
+  onClick(e) {
+    e.preventDefault()
+    const {setChannel, channel} = this.props
+    setChannel(channel)
+  }
 
+  render() {
+    const { channel, activeChannel } = this.props
+    const active = channel === activeChannel ? 'active' : ''
+    return (
+      <li className={active}>
+        <a onClick={this.onClick.bind(this)}>
+          {channel.name}
+        </a>
+      </li>
+    )
+  }
+
+}
+
+Channel.propTypes = {
+  channel: PropTypes.object.isRequired,
+  setChannel: PropTypes.func.isRequired,
+  activeChannel: PropTypes.object.isRequired
+}
+
+export default Channel
