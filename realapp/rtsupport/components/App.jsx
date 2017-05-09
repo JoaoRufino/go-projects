@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ChannelSection from './ChannelSection.jsx';
+import ChannelSection from './channels/ChannelSection.jsx';
 
 
 class App extends Component{
@@ -16,7 +16,7 @@ class App extends Component{
 		//TODO : Send to server
 	}
 
-	addChannel(activeChannel){
+	setChannel(activeChannel){
 		this.setState({activeChannel});
 		//TODO : Send to server
 	}

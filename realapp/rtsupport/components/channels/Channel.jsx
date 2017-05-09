@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 
 class Channel extends Component{
+	onClick(e){
+		e.preventDefault();
+		const {setChannel, channel} = this.props;
+		setChannel(channel);
+	}
 	render(){
 		const {channel} = this.props;
 		return (
@@ -18,4 +23,4 @@ class Channel extends Component{
 	}
 
 	export default Channel
-}
+
