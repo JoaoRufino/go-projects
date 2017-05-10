@@ -23,9 +23,9 @@ class Channel extends Component {
 }
 
 Channel.propTypes = {
-  channel: PropTypes.object.isRequired,
-  setChannel: PropTypes.func.isRequired,
-  activeChannel: PropTypes.object.isRequired
+  channel: React.PropTypes.object.isRequired,
+  setChannel: React.PropTypes.func.isRequired,
+  activeChannel: React.PropTypes.object.isRequired
 }
 
 export default Channel
