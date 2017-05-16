@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+<button id="addCircle">Add Circle</button>
+
+<button id="addRectangle">Add Rectangle</button>
+
+<button id="addTriangle">Add Triangle</button>
+
+<button id="pencil" toggle>Pencil</button>
+
+<button id="selection" toggle>Selection</button>
+
+    <canvas id="canvas" width="1024" height="768"></canvas>
+
+
+
+    <script src="lib/fabric.js"></script>
+
+    <script>
+
+        var canvas = new fabric.Canvas('canvas');
+
+
+
+        canvas.freeDrawingBrush.color = 'green';
+
+        canvas.freeDrawingBrush.lineWidth = 10;
+
+        canvas.selectable = false;
+
+        canvas.on('path:created',function(e){
+
+            console.log(JSON.stringify(e));
+
+        }) 
+
+
+
+        function init()
+
+        {
+
+            pencil.addEventListener('click', pencilHandler);
+
+            addCircle.addEventListener('click', addCircleHandler);
+
+            addRectangle.addEventListener('click', addRectangleHandler);
+
+            addTriangle.addEventListener('click', addTriangleHandler);
+
+            selection.addEventListener('click', function(){
+
+                canvas.isDrawingMode = false;
+
+            })
+
+        }
+
+
+        function pencilHandler()
+
+        {
+
+            canvas.isDrawingMode = true;
+
+        }
+
+
+        function addCircleHandler()
+
+        {
+
+            var circle = new fabric.Circle({
+
+              radius: 20, 
+
+              fill: 'green', 
+
+              left: 100, 
+
+              top: 100
+
+            });
+
+
+
+        canvas.add(circle);
+
+        }
+
+
+        function addRectangleHandler()
+
+        {
+
+            var rect = new fabric.Rect({
+
+                top : 100,
+
+                left : 100,
+
+                width : 60,
+
+                height : 70,
+
+                fill : 'red'
+
+            });
+
+            canvas.add(rect);
+
+        }
+
+
+        function addTriangleHandler()
+
+        {
+
+            var triangle = new fabric.Triangle({
+
+                width: 20, 
+
+                height: 30, 
+
+                fill: 'blue', 
+
+                left: 50, 
+
+                top: 50
+
+            });
+
+            canvas.add(triangle);
+
+        }
+
+
+        window.addEventListener("load", init, false);
+
+
+    </script>
+
+</body>
+
+</html>

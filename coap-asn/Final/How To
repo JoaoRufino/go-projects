@@ -1,0 +1,15 @@
+%%%% COAP 16/05/17 %%%%
+
+%%%% COAP SERVER RECEIVES DENM AND CAM MESSAGES %%%
+%%%% TODO NATS CLIENT %%%
+
+
+%%%HOW TO BUILD main%%%%
+
+go build main.go
+
+%%%HOW TO BUILD CONTAINER%%%%
+
+docker build . -t <imagename>
+docker run -p 5683 --rm --name coapserver <imagename>
+

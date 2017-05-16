@@ -1,0 +1,53 @@
+var WebSocketServer = require('ws').Server
+  , wss = new WebSocketServer({ port: 9001 });
+
+wss.broadcast = function broadcast(data,sentBy) 
+{
+  for(var i in this.clients) 
+  {
+  	if(this.clients[i] != sentBy)
+  	{
+  		this.clients[i].send(data);	
+  	}
+  }
+};
+
+var currentSlideData = { 'indexh' :0 , 'indexv' : 0};
+
+function isJson(str) 
+{
+    try 
+    {
+        JSON.parse(str);
+    } 
+    catch (e) 
+    {
+        return false;
+    }
+    return true;
+}
+
+wss.on('connection', function connection(ws) 
+{
+  	ws.on('message', function incoming(message) 
+  	{
+
+	if(isJson(message))
+	{
+		var obj = JSON.parse(message);
+	  	
+	  	if(currentSlideData.indexv != obj.indexv || currentSlideData.indexh != obj.indexh )
+	  	{
+	  		currentSlideData.indexv = obj.indexv;
+  			currentSlideData.indexh = obj.indexh;	
+
+  			wss.broadcast(message,this);
+  			console.log('broadcasting data');
+	  	}
+  		  		
+	}
+    console.log('received: %s', message);
+  });
+  console.log('sending initial Data');
+  ws.send(JSON.stringify(currentSlideData));
+});

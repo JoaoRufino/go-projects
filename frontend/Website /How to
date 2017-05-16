@@ -1,0 +1,15 @@
+%%%% FRONTEND 16/05/17 %%%%
+
+%%%% HTTP SERVER SENDS MAP WEBPAGE %%%
+%%%% TODO SOCKET CLIENT %%%
+
+%%%HOW TO BUILD main%%%%
+
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+%%%HOW TO BUILD AND TEST CONTAINER%%%%
+
+docker build . -t <imagename>
+docker run -p 8080 --rm --name frontend <imagename>
+
+%%%http://websocket.org/echo.html%%%

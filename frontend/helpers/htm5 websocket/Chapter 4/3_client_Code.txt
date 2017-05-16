@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+<button id="addCircle">Add Circle</button>
+
+<button id="addRectangle">Add Rectangle</button>
+
+<button id="addTriangle">Add Triangle</button>
+
+<button id="pencil" toggle>Pencil</button>
+
+<button id="selection" toggle>Selection</button>
+
+    <canvas id="canvas" width="1024" height="768"></canvas>
+
+
+    <script src="lib/fabric.js"></script>
+
+    <script>
+
+        var canvas = new fabric.Canvas('canvas');
+
+        canvas.freeDrawingBrush.color = 'green';
+
+    
+
+        canvas.freeDrawingBrush.lineWidth = 10;
+
+        canvas.selectable = false;
+
+        canvas.on('path:created',function(e){
+
+            console.log(JSON.stringify(e));
+
+        }) 
+
+
+        function init()
+
+        {
+
+            initServer();
+
+            pencil.addEventListener('click', pencilHandler);
+
+            addCircle.addEventListener('click', addCircleHandler);
+
+            addRectangle.addEventListener('click', addRectangleHandler);
+
+            addTriangle.addEventListener('click', addTriangleHandler);
+
+            selection.addEventListener('click', function(){
+
+                canvas.isDrawingMode = false;
+
+            })
+
+        }
+
+
+        function pencilHandler()
+
+        {
+
+            canvas.isDrawingMode = true;
+
+        }
+
+
+        function addCircleHandler()
+
+        {
+
+            var obj = {
+
+              radius: 20, 
+
+              fill: 'green', 
+
+              left: 100, 
+
+              top: 100
+
+            };
+
+            // var circle = new fabric.Circle(obj);
+
+            // canvas.add(circle);
+
+            sendObject('Circle',obj);
+
+        }
+
+
+        function addRectangleHandler()
+
+        {
+
+            var obj = {
+
+                top : 100,
+
+                left : 100,
+
+                width : 60,
+
+                height : 70,
+
+                fill : 'red'
+
+            };   
+
+            var rect = new fabric.Rect(obj);
+
+            // canvas.add(rect);
+
+            sendObject('Rectangle',obj);
+
+        }
+
+
+
+        function addTriangleHandler()
+
+        {
+
+            var obj = {
+
+                width: 20, 
+
+                height: 30, 
+
+                fill: 'blue', 
+
+                left: 50, 
+
+                top: 50
+
+            };
+
+            var triangle = new fabric.Triangle(obj);
+
+            // canvas.add(triangle);
+
+            sendObject('Triangle',obj);
+
+        }
+
+        function addObject(type,obj)
+
+        {
+
+            var shape;
+
+            if(type == 'Triangle')
+
+            {
+
+                shape = new fabric.Triangle(obj);
+
+            }
+
+            else if(type == 'Rectangle')
+
+            {
+
+                shape = new fabric.Rect(obj);
+
+            }
+
+             else if(type == 'Circle')
+
+            {
+
+                shape = new fabric.Circle(obj);
+
+            } 
+
+            canvas.add(shape);
+
+        }
+
+        function isJson(str) 
+
+        {
+
+            try 
+
+            {
+
+                JSON.parse(str);
+
+            } 
+
+            catch (e) 
+
+            {
+
+                return false;
+
+            }
+
+            return true;
+
+        }
+
+        var ws;
+
+        function sendObject(type,obj)
+
+        {
+
+            ws.send(JSON.stringify({'type': type,'data' : obj}));
+
+        }
+
+        function connectionOpen()
+
+        {
+
+             ws.send('connection open');
+
+        }
+
+        function onMessageFromServer(message)
+
+        {
+
+            console.log('received: '+ message);
+
+            if(isJson(message.data))
+
+            {
+
+                var obj = JSON.parse(message.data)
+
+                console.log("got data from server");
+
+                addObject(obj.type,obj.data)
+
+            }
+
+        }
+
+        function initServer()
+
+        {
+
+            ws = new WebSocket('ws://localhost:9001');
+
+            ws.onopen = connectionOpen;
+  
+
+            ws.onmessage = onMessageFromServer;
+
+        }
+
+        window.addEventListener("load", init, false);
+
+    </script>
+
+</body>
+
+</html>
