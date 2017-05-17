@@ -73,7 +73,7 @@ int xer_encode_to_buffer(xer_buffer_t* xb, asn_TYPE_descriptor_t *td, void *sptr
 }
 
 
-int decode(uint8_t *buffer,int file_size, char *xml){
+int decode(uint8_t *buffer,int file_size){
 	asn_dec_rval_t dec;
 	int er;
 	asn_codec_ctx_t *opt_codec_ctx = 0;
@@ -82,11 +82,14 @@ int decode(uint8_t *buffer,int file_size, char *xml){
 		syslog_emerg("calloc() failed: %m");
 	}
 	dec =  uper_decode_complete(opt_codec_ctx,&asn_DEF_CAM, (void **) &cam, buffer, file_size);
+	printf("DONE!!!!\n");
+	init_xer_buffer(xerbuffer);
+	free_xer_buffer(xerbuffer);
+
 	switch(dec.code) {
 		case RC_OK:
-			init_xer_buffer(xerbuffer);
+			xer_fprint(stdout, &asn_DEF_CAM, cam);
 			er = xer_encode_to_buffer(xerbuffer,&asn_DEF_CAM,cam);
-			&xml = xerbuffer->buffer;
 			return 0;
 		case RC_FAIL:
 			syslog_debug("Error decoding: RC_FAIL");
@@ -121,7 +124,7 @@ func main() {
 		buffer, err = ioutil.ReadFile("./it2s-CAM_Tx.code")*/
 
 	server := canopus.NewServer()
-	var xml string
+	//var xml string , C.CString(xml)
 	server.Get("/cam/json", func(req canopus.Request) canopus.Response {
 		msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewPlainTextPayload("Acknowledged"))
 		res := canopus.NewResponse(msg, nil)
@@ -143,9 +146,8 @@ func main() {
 		// Save to file
 		payload := req.GetMessage().GetPayload().GetBytes()
 		log.Println("len", len(payload))
-		C.decode((*C.uint8_t)(unsafe.Pointer(&payload[0])), (C.int)(len(payload)), C.CString(xml)) //BEWARE VERY UNSAFE SIFILIS!!! AIDS!!!!
+		C.decode((*C.uint8_t)(unsafe.Pointer(&payload[0])), (C.int)(len(payload))) //BEWARE VERY UNSAFE SIFILIS!!! AIDS!!!!
 		fmt.Println(C.get_lat(), C.get_lon())
-		fmt.Println(xml)
 		changeVal := fmt.Sprint((uint32)(C.get_lat())) + "|" + fmt.Sprint((uint32)(C.get_lon()))
 		server.NotifyChange("/cam/pos", changeVal, false)
 		return res
