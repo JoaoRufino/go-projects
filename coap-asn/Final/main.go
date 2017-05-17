@@ -74,36 +74,38 @@ func main() {
 
 	server := canopus.NewServer()
 
+	server.Get("/cam/pos", func(req canopus.Request) canopus.Response {
+		msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewPlainTextPayload("Acknowledged"))
+		res := canopus.NewResponse(msg, nil)
+		return res
+	})
+
 	server.Post("/cam", func(req canopus.Request) canopus.Response {
+		log.Println("cam")
+
 		msg := canopus.ContentMessage(req.GetMessage().GetMessageId(), canopus.MessageAcknowledgment)
 		msg.SetStringPayload("DONE! ")
 		res := canopus.NewResponse(msg, nil)
 
 		// Save to file
-		payload := req.GetMessage().GetPayload().GetBytes()
-		log.Println("len", len(payload))
-		C.decode((*C.uint8_t)(unsafe.Pointer(&payload[0])), (C.int)(len(payload))) //BEWARE VERY UNSAFE SIFILIS!!! AIDS!!!!
-		log.Println(C.get_lat(), C.get_lon())
+		go func() {
+			payload := req.GetMessage().GetPayload().GetBytes()
+			log.Println("len", len(payload))
+			C.decode((*C.uint8_t)(unsafe.Pointer(&payload[0])), (C.int)(len(payload))) //BEWARE VERY UNSAFE SIFILIS!!! AIDS!!!!
+			fmt.Println(C.get_lat(), C.get_lon())
 
-		changeVal := fmt.Sprint((uint32)(C.get_lat())) + "|" + fmt.Sprint((uint32)(C.get_lon()))
-		server.NotifyChange("/cam/pos", changeVal, false)
+			changeVal := fmt.Sprint((uint32)(C.get_lat())) + "|" + fmt.Sprint((uint32)(C.get_lon()))
+			server.NotifyChange("/cam/pos", changeVal, true)
+		}()
 		return res
 
 	})
-	server.Get("/cam/pos", func(req canopus.Request) canopus.Response {
-		msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewPlainTextPayload("Acknowledged"))
-		res := canopus.NewResponse(msg, nil)
-
-		return res
-	})
-
-	server.OnBlockMessage(func(msg canopus.Message, inbound bool) {
-		// log.Println("Incoming Block Message:")
-		// canopus.PrintMessage(msg)
+	server.OnMessage(func(msg canopus.Message, inbound bool) {
+		canopus.PrintMessage(msg)
 	})
 
 	server.OnObserve(func(resource string, msg canopus.Message) {
-		fmt.Println("[SERVER << ] Observe Requested for " + resource)
+		fmt.Println("Observe Requested for " + resource)
 	})
 
 	server.ListenAndServe(":5683")
