@@ -3,7 +3,7 @@ var $mapster;
 (function(window, $) {
   
   $mapster = $('#map-canvas').mapster(Mapster.MAP_OPTIONS);
-  ws = new WebSocket('ws://echo.websocket.org/')
+  ws = new WebSocket('ws://localhost:4000/')
   ws.onopen = onOpen;
   ws.onmessage =onMessage;
   ws.onclose = onOpen;

@@ -1,12 +1,46 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
-	nats "github.com/nats-io/go-nats"
+	"github.com/gorilla/websocket"
 )
 
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func main() {
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":4000", nil)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	socket, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Panic(err.Error())
+		return
+	}
+	for {
+		msgType, msg, err := socket.ReadMessage()
+		if err != nil {
+			log.Panic(err.Error())
+		}
+		fmt.Println(string(msg))
+		if err = socket.WriteMessage(msgType, msg); err != nil {
+			log.Panic(err.Error())
+			return
+		}
+	}
+}
+
+/*
 func main() {
 	session, err := nats.Connect("nats;//localhost:4222")
 
@@ -16,13 +50,11 @@ func main() {
 
 	router := NewRouter(session)
 
-	router.Handle("channel add", addChannel)
-	router.Handle("channel subscribe", subscribeChannel)
-	router.Handle("channel unsubscribe", unsubscribeChannel)
+	router.Handle("denm add", addChannel)
+	router.Handle("denm remove", subscribeChannel)
 
-	router.Handle("user edit", editUser)
-	router.Handle("user subscribe", subscribeUser)
-	router.Handle("user unsubscribe", unsubscribeUser)
+	router.Handle("cam add", unsubscribeChannel)
+	router.Handle("cam remove", editUser)
 
 	router.Handle("message add", addChannelMessage)
 	router.Handle("message subscribe", subscribeChannelMessage)
@@ -31,7 +63,7 @@ func main() {
 	http.Handle("/", router)
 	http.ListenAndServe(":4000", nil)
 }
-
+*/
 // type Channel struct {
 //   Id string `json:"id" gorethink:"id,omitempty"`
 //   Name string `json:"name" gorethink:"name"`
