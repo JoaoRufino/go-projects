@@ -52,15 +52,22 @@
 					this._attachEvents(marker,opts.events);
 				}
 				if(opts.content) {
+					var infoWindow= new google.maps.InfoWindow({
+								content: opts.content
+							});
 					 // to pass to other function
 					this._on({
 						obj: marker,
 						event: 'mouseover',
 						callback: function(){
-							var infoWindow= new google.maps.InfoWindow({
-								content: opts.content
-							});
 							infoWindow.open(this.gMap,marker);
+						}
+					}),
+					this._on({
+						obj: marker,
+						event: 'mouseout',
+						callback: function(){
+							infoWindow.close();
 						}
 					})
 				}
