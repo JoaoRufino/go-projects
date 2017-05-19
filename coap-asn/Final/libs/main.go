@@ -155,37 +155,40 @@ func check(e error) {
 	}
 }
 
+//BitString ASN1 Data Type
 type BitString struct {
 	Bytes     []byte // bits packed into bytes.
 	BitLength int    // length in bits.
 }
 
+//Enumerated ASN1 Data Type
 type Enumerated int
 
+//CAM Message
 type CAM struct {
-	Header ItsPduHeader
-	Cam    CoopAwareness
+	Header ItsPduHeader  `asn1:"explicit,tag:16"`
+	Cam    CoopAwareness `asn1:"explicit,tag:16"`
 }
 
 type CoopAwareness struct {
-	GenerationDeltaTime GenerationDeltaTime
-	CamParameters       CamParameters
+	GenerationDeltaTime GenerationDeltaTime `asn1:"explicit,tag:16"`
+	CamParameters       CamParameters       `asn1:"explicit,tag:16"`
 }
 
 type CamParameters struct {
-	BasicContainer          BasicContainer
-	HighFrequencyContainer  HighFrequencyContainer
-	LowFrequencyContainer   LowFrequencyContainer   //OPTIONAL
-	specialVehicleContainer SpecialVehicleContainer //OPTIONAL
+	BasicContainer          BasicContainer          `asn1:"explicit,tag:16"`
+	HighFrequencyContainer  HighFrequencyContainer  `asn1:"explicit,tag:16"`
+	LowFrequencyContainer   LowFrequencyContainer   `asn1:"optional,tag:16"` //OPTIONAL
+	specialVehicleContainer SpecialVehicleContainer `asn1:"optional,tag:16"` //OPTIONAL
 }
 
 type HighFrequencyContainer struct {
-	BasicVehicleContainerHighFrequency BasicVehicleContainerHighFrequency
-	rsuContainerHighFrequency          RSUContainerHighFrequency
+	BasicVehicleContainerHighFrequency BasicVehicleContainerHighFrequency `asn1:"explicit,tag:16"`
+	rsuContainerHighFrequency          RSUContainerHighFrequency          `asn1:"explicit,tag:16"`
 }
 
 type LowFrequencyContainer struct {
-	BasicVehicleContainerLowFrequency BasicVehicleContainerLowFrequency
+	BasicVehicleContainerLowFrequency BasicVehicleContainerLowFrequency `asn1:"explicit,tag:16"`
 }
 
 type SpecialVehicleContainer struct {

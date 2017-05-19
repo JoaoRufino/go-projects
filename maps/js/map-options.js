@@ -20,7 +20,7 @@ mapster.MAP_OPTIONS = {
       options:{
         averageCenter: true,
         styles:[{
-          url: 'images/m2.svg',
+          url: 'images/m1.svg',
           height: 56,
           width: 55,
           textSize:19
